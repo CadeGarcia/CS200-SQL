@@ -1,0 +1,144 @@
+/* Cade Garcia
+Assignment 2
+Creating database, tables, and relationships*/
+
+#===== Creating Database =====# 
+
+CREATE DATABASE assignment3;
+
+#===== Creating Tables =====#
+
+	# Dorm Table #
+CREATE TABLE dorm(
+	dorName VARCHAR(30) NOT NULL PRIMARY KEY, -- PK dorName 
+    dorPhone VARCHAR(20) NULL,
+    dorAddress VARCHAR(50) NULL,
+    dorCost INTEGER NOT NULL
+);
+
+	# Course Table #
+CREATE TABLE course(
+	crsID VARCHAR(20) NOT NULL PRIMARY KEY, -- PK crsName
+    crsName VARCHAR(50) NOT NULL,
+    crsCredit INTEGER NOT NULL,
+	crsPreq VARCHAR(30) NOT NULL,
+    crsCategory VARCHAR(30) NULL
+);
+
+	# Advisor Table #
+CREATE TABLE Advisor(
+	advID VARCHAR(30) NOT NULL PRIMARY KEY,
+    advFirst VARCHAR(40) NOT NULL,
+    advLast VARCHAR(20) NOT NULL,
+    advPhone VARCHAR(20) NULL
+);
+
+	# Department Table #
+CREATE TABLE Department(
+	dptID CHAR(3) NOT NULL PRIMARY KEY,
+    dptName VARCHAR(40) NOT NULL,
+    dptPhone VARCHAR(20) NOT NULL,
+    advID VARCHAR(30) NOT NULL,
+    FOREIGN KEY (advID) REFERENCES Advisor(advID)
+);
+
+	# Student Table #
+CREATE TABLE student(
+			stdID INTEGER NOT NULL PRIMARY KEY, -- PK stdID
+			stdFirstName VARCHAR(30) NOT NULL,
+            stdLastName VARCHAR(30) NOT NULL,
+            stdAddress VARCHAR(50) NOT NULL,
+            stdCity VARCHAR(30) NOT NULL,
+            stdState CHAR(2) NOT NULL,
+            stdZip INTEGER NOT NULL,
+            stdEmail VARCHAR(50) NOT NULL,
+			stdMajor VARCHAR(5) NULL,
+            advID VARCHAR(30) NOT NULL,
+			dorName VARCHAR(30) NOT NULL,
+            dptID CHAR(3) NOT NULL,
+            FOREIGN KEY (advID) REFERENCES Advisor(advID),
+            FOREIGN KEY (dorName) REFERENCES dorm(dorName),
+            FOREIGN KEY (dptID) REFERENCES Department(dptID)
+);
+
+-- CREATING LINKING TABLE WITH **TWO** PRIMARY KEYS --
+
+	# Linking Table #
+CREATE TABLE linking(
+			stdID INTEGER NOT NULL,
+            crsID VARCHAR(20) NOT NULL,
+            linCompleted VARCHAR (3) NULL,
+            linGrades CHAR(1) NULL,
+            linSemester VARCHAR(6) NOT NULL,
+            linYear VARCHAR(4) NOT NULL,
+            PRIMARY KEY (stdID, crsID),
+            FOREIGN KEY (stdID) REFERENCES student(stdID),
+            FOREIGN KEY (crsID) REFERENCES course(crsID)
+);
+
+#===== INSERTING VALUES FROM SPREADSHEET INTO TABLES! =====#
+
+	# Inserting dorm values #
+INSERT IGNORE INTO dorm (dorName, dorPhone, dorAddress, dorCost)
+VALUES	('Lokelani', '735-4709', '3140 Waialae Ave', 1100),
+        ('None', null, null, 0),
+        ('Kieffer', '735-5802', '3140 Waialae Ave', 500);
+
+	# Inserting course values #
+INSERT INTO course(crsID, crsName, crsCredit, crsPreq, crsCategory)
+VALUES	('ENV100', 'Intro to Expository Writiting', 3,'None', 'Pre-Major'),
+		('ENV102', 'Expository Writing', 3, 'None', 'Pre-Major'),
+		('ENV310', 'Types of Literature', 3, 'ENV102', 'Major'),
+		('BU200', 'Intro to Business', 3, 'None', 'Pre-Major'),
+		('CIS100', 'Computers and Applications Software', 3, 'None', 'Pre-Major'),
+		('CIS400', 'Database design and management', 3, 'CIS100', 'Major'),
+        ('none', 'none', 0, 'none', 'none');
+
+#REMOVE ADVISOR TABLE NULLS AND ADJUST DATA, INPUT ADVID IN DEPT TABLE, 
+
+	# Inserting advisor values #
+INSERT INTO Advisor (advID, advFirst, advLast, advPhone)
+VALUES	(11, 'Rylan', 'Chong', '739-4601'),
+		(0, 'none', 'none', null),
+		(12, 'Robert', 'Maruyama', '749-4605'),
+        (13, 'Laura', 'Tipton', '739-4123'),
+		(14, 'Mark', 'Speck', '739-4444');
+        
+	# Inserting Department values #
+INSERT INTO Department (dptID, dptName, dptPhone, advID)
+VALUES	('ENV', 'Enviroment', '437-2222', 11),
+		('CIS', 'Computer Information Systems' ,'437-5555', 12),
+		('BU', 'Business', '437-3333', 0);
+
+	# Inserting student values#
+INSERT INTO STUDENT (stdID, stdFirstName, stdLastName, stdAddress, stdCity, stdState, stdZip, stdEmail, stdMajor,
+advID, dorName, dptID)
+VALUES	(1, 'Bob', 'Furuhashi', '3140 Waialae Ave', 'Honolulu', 'HI', '96816', 'kshigiji@gmail.com', 'ENV', 11, 
+		'Lokelani', 'ENV'),
+        (2, 'Alice', 'Grey', '1610 Boiler Rd', 'West Lafayette', 'IN', '47906', 'alice.grey@student.chaminade.edu',
+        'CIS', 12, 'Lokelani', 'CIS'),
+        (3, 'Christian', 'Phillips', '987 6th Ave', 'Honolulu', 'HI', '96816', 'cphillips@student.chaminade.edu',
+        'CIS', 12, 'Lokelani', 'CIS'),
+        (4, 'Jeff', 'Bedora', '3046-B Harding Ave',	'Honolulu', 'HI', '96816', 'coolcatman2001@yahoo.com', 'CIS',
+        12, 'none', 'CIS'),
+        (5, 'Hannah', 'Brown', '3140 Waialae Ave', 'Honolulu', 'HI', '96816', 'hannah.brown@student.chaminade.edu',
+        'ENV', 11, 'Lokelani', 'ENV'),
+        (6, 'Rena', 'Phillips', '987 6th Ave', 'Honolulu', 'HI', '96816', 'rena.phillips@student.chaminade.edu', 
+        'ENV', 11, 'Lokelani', 'ENV'),
+        (7, 'Cathleen', 'Akemi', '3140 Waialae Ave', 'Honolulu', 'HI', '96816', 'cathleen.akemi@student.chaminade.edu',
+        'ENV', 11, 'Lokelani', 'CIS'),
+        (8, 'Anthony', 'Davis', '3140 Waialae Ave', 'Honolulu', 'HI', '96816', 'anthony.davis@student.chaminade.edu',
+        'CIS', 12, 'Lokelani', 'CIS'),
+        (9, 'Lori',	'Maumalanga', '3140 Waialae Ave', 'Honolulu', 'HI', '96816', 'lori.maumalanga@student.chaminade.edu',
+        'CIS', 12, 'Lokelani', 'CIS'),
+        (10, 'Becks', 'Holden', '123 Apple St', 'Aiea', 'HI', '96701', 'beck123@outlook.com', 'CIS', 12, 
+        'Lokelani', 'CIS');
+
+	# Insert Linking Values #
+INSERT INTO linking (stdID, crsID, linCompleted, linGrades , linSemester, linYear)
+VALUES	(1, 'ENV100', 'YES', 'A', 'Fall', '2009'),
+		(1, 'ENV102', 'YES', 'C', 'Spring', '2010'),
+		(1, 'ENV310', 'NO', null, 'Fall', '2010'),
+        (2, 'BU200', 'YES', 'A', 'Spring', '2009'),
+        (2, 'CIS100', 'YES', 'A', 'Spring', '2009'),
+        (2, 'CIS400', 'YES', 'B', 'Fall', '2009');

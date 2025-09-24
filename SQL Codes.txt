@@ -1,0 +1,173 @@
+-- Commenting style
+/*--- Title ---*/
+## Header ##
+# subheader
+/*Fill in*/
+-- extra info
+
+/*----- ALL DROP COMMANDS (includes db, tables, users) -----*/
+
+DROP TABLE /*Table*/;
+DROP DATABASE Security;
+
+DROP USER 'bob'@'localhost';
+DROP USER 'alice'@'localhost';
+DROP USER 'aaron'@'localhost';
+
+
+/*----- TABLE WORK -----*/
+
+ALTER TABLE /*TableName*/ DROP/ADD/MODIFY /*New column*/
+
+# Renaming 
+RENAME TABLE student TO students;
+ALTER TABLE students CHANGE COLUMN stdMajor stdMajor VARCHAR(10) NULL; -- change column name
+
+
+/*----- CRYPTINGS -----*/
+
+# Encrypting
+CAST(aes_encrypt(/*Protected Info*/, 'password') AS CHAR (123)) 
+# Decrypting 
+CAST(aes_decrypt(/*PROTECTED INFO*/, 'password') AS CHAR (50)) /*result tag*/
+
+
+/*----- QUERY -----*/
+
+SELECT * FROM /*TableName*/ -- * means ALL
+
+## Querying Columns ##
+SELECT /*Column1*/ -- Can be multiple columns
+FROM /*table*/;
+
+## Extra 
+WHERE /*Column*/=/*Value*/;
+WHERE NOT /*Column*/=/*Value*/;
+WHERE /*Column*/=/*Value*/ AND/OR /*Column*/=/*Value*/;
+WHERE /*Column*/=/*Value*/ BETWEEN /*Value or Letter*/ and /*Value or Letter*/
+
+ORDER BY /*Column*/ -- can be multiple columns
+ORDER BY /*Column*/ DESC;
+ORDER BY /*Column*/ ASC;
+ORDER BY /*Column*/ ASC, /*Column*/ DESC; -- You can do both
+
+# Distinct query 
+SELECT DISTINCT (advLast) 
+FROM Advisor;
+
+# You can do WHERE and ORDER BY
+SELECT *
+FROM Advisor
+WHERE advLast = 'Chong'
+ORDER BY advPhone;
+
+# Group by, count, and order by
+SELECT advLast, COUNT(*)
+FROM Advisor
+GROUP BY advLast
+ORDER BY advLast;
+
+# Having 
+SELECT advLast, COUNT(*)
+FROM advisor
+GROUP BY advLast
+HAVING COUNT(*) > 1 
+ORDER BY advLast;
+
+## Calculations ##
+# Avg 
+SELECT AVG(dorCost)
+FROM dorm;
+
+# Sum 
+SELECT SUM(dorCost)
+FROM dorm;
+
+# Min and Max 
+SELECT MIN(dorCost)
+FROM dorm;
+
+SELECT MAX(dorCost)
+FROM dorm;
+
+## IN or NOT IN ##
+# IN
+SELECT *
+FROM Advisor
+WHERE advLast
+IN ('Chong', 'Tipton'); 
+
+# NOT IN 
+SELECT *
+FROM Advisor
+WHERE advLast
+NOT IN ('Chong', 'Tipton', 'Speck'); 
+
+
+/*----- QUERY JOINING -----*/
+
+## Inner Join ##
+SELECT * 
+FROM student, dorm -- automatically inner joins
+WHERE student.dorName = dorm.dorName;
+
+SELECT *
+FROM student INNER JOIN dorm -- inner join
+ON student.dorName=dorm.dorName;
+
+SELECT *
+FROM student INNER JOIN student_course_linking -- order matters!!!
+ON student.stdID = student_course_linking.stdID;
+
+## Left Join ##
+SELECT *
+FROM student LEFT JOIN dorm -- student table + similar ones from dorm table
+ON student.dorName = dorm.dorName;
+
+SELECT *
+FROM dorm LEFT JOIN student
+ON student.dorName= dorm.dorName; -- as long as there is linkage, it doesn't matter how you flip this line.
+
+## Right Join ##
+SELECT *
+FROM student RIGHT JOIN student_course_linking
+ON student.stdID = student_course_linking.stdID
+ORDER BY student.stdID;
+
+## 3 Tables ##
+SELECT *
+FROM student_course_linking INNER JOIN student
+ON student_course_linking.stdID = student.stdID
+	INNER JOIN course -- can add this because code above already had course ID 
+    ON course.crsID = student_course_linking.crsID;
+    
+    
+/*--- SUBQUERY ---*/
+
+SELECT /*Column 1 and 2*/
+FROM /*Table*/
+WHERE /*Column*/=(SELECT advID
+				FROM advisor
+                WHERE advLastName = 'Maruyama');
+                
+SELECT stdID, stdFirstName
+FROM student 
+WHERE stdID = (SELECT stdID 
+			FROM student_course_linking
+            WHERE crsID = 'CIS400' AND linComplete = 'yes');
+            
+SELECT stdID, stdFirstName
+FROM student
+WHERE dorName IN (SELECT dorName
+					FROM dorm
+                    WHERE dorName IN ('Lokelani', 'Kieffer'))
+ORDER BY stdID;
+
+-- which students are not taking Intro to Business
+SELECT stdID, stdFirstName
+FROM student
+WHERE stdID != (SELECT stdID -- !- is the same as NOT IN 
+					FROM student_course_linking
+                    WHERE crsID IN (SELECT crsID
+									FROM course
+                                    WHERE crsName = 'Intro to Business'));

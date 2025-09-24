@@ -1,0 +1,70 @@
+[{
+  "Location": {
+    "type": "Point",
+    "coordinates": [
+      35.652832,
+      139.839478
+    ]
+  },
+  "country": "Japan",
+  "city": "Tokyo",
+  "captial": "Tokyo",
+  "zipcode": "100-0000",
+  "citypopulation": 37194000
+},
+{
+  "Location": {
+    "type": "Point",
+    "coordinates": [
+      35.01478092548045,
+      135.761808227364
+    ]
+  },
+  "country": "Japan",
+  "city": "Kyoto",
+  "capital": "Tokyo",
+  "zipcode": "520-0461",
+  "citypopulation": 1459640
+},
+{
+  "Location": {
+    "type": "Point",
+    "coordinates": [
+      34.38624562674289,
+      132.45581711214348
+    ]
+  },
+  "country": "Japan",
+  "city": "Hiroshima",
+  "captial": "Toyko",
+  "zipcode": "730-0000",
+  "citypopulation": 2068000
+},
+{
+  "Location": {
+    "type": "Point",
+    "coordinates": [
+      34.66982038046638,
+      135.49898763443855
+    ]
+  },
+  "country": "Japan",
+  "city": "Osaka",
+  "captial": "Toyko",
+  "zipcode": "530-0000",
+  "citypopulation": 19013000
+},
+{
+  "Location": {
+    "type": "Point",
+    "coordinates": [
+      35.170311848014386,
+      136.90951835212877
+    ]
+  },
+  "country": "Japan",
+  "city": "Nagoya",
+  "capital": "Tokyo",
+  "zipcode": "450-0001",
+  "citypopulation": 9569000
+}]

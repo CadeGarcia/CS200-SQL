@@ -1,0 +1,154 @@
+/* Cade Garcia
+Assignment 4
+Querying Single Table */
+
+#===== Creating Database =====# 
+
+CREATE DATABASE assignment4;
+
+#===== Creating Tables =====#
+
+	# Creating Tables and Adding values #
+CREATE TABLE Advisor(
+	advID INTEGER NOT NULL PRIMARY KEY,
+    advFirst VARCHAR(40) NOT NULL,
+    advLast VARCHAR(20) NOT NULL,
+    advPhone VARCHAR(20) NULL
+);
+
+INSERT INTO Advisor
+VALUES	(15, 'Tom', 'Chong', '739-4602'),
+		(10, 'Rylan', 'Chong', '739-1010'),
+        (0, 'none', 'none', null),
+		(12, 'Robert', 'Maruyama', '749-4605'),
+        (13, 'Laura', 'Tipton', '739-4123'),
+		(14, 'Mark', 'Speck', '739-4444');
+
+CREATE TABLE dorm(
+	dorName VARCHAR(30) NOT NULL PRIMARY KEY, -- PK dorName 
+    dorPhone VARCHAR(20) NULL,
+    dorAddress VARCHAR(50) NULL,
+    dorCost INTEGER NOT NULL
+);
+
+INSERT IGNORE INTO dorm (dorName, dorPhone, dorAddress, dorCost)
+VALUES	('Lokelani', '735-4709', '3140 Waialae Ave', 1100),
+        ('None', null, null, 0),
+        ('Kieffer', '735-5802', '3140 Waialae Ave', 500);
+        
+	# Querying a single column # 
+SELECT advLast
+FROM Advisor;
+
+	# Querying multiple columns #
+SELECT advLast, advPhone
+FROM Advisor;
+
+	# Distinct query #
+SELECT DISTINCT (advLast) 
+FROM Advisor;
+
+	# Where query #
+SELECT *
+FROM Advisor
+WHERE advLast='Chong';
+
+	# Where not query #
+SELECT *
+FROM Advisor
+WHERE NOT advFIrst='Tom';
+
+	# WHERE, AND, OR, and BETWEEN query #
+# AND
+SELECT *
+FROM Advisor
+WHERE advFirst = 'Tom' AND advLast = 'Chong';
+
+# OR
+SELECT *
+FROM Advisor
+WHERE advFirst = 'Rylan' OR advLast = 'Chong';
+
+SELECT *
+FROM Advisor
+WHERE advID = 10 OR advFirst = 'Robert' OR advPhone = '739-4123';
+
+# BETWEEN
+SELECT *
+FROM Advisor
+WHERE advFirst BETWEEN 'L' AND 'R'; 
+
+SELECT *
+FROM Advisor
+WHERE advFirst BETWEEN 'Laura' AND 'Rylan'; 
+
+	# Single order condition #
+SELECT *
+FROM Advisor
+ORDER BY advLast;
+
+	# Multiple order condition #
+SELECT * FROM Advisor ORDER BY advPhone, advFirst;
+
+	# Descending orders #
+SELECT *
+FROM Advisor
+ORDER BY advLast DESC;
+
+	# Acsending orders #
+SELECT *
+FROM Advisor
+ORDER BY advLast ASC;
+
+	# Both DESC and ASC orders #
+SELECT *
+FROM Advisor
+ORDER BY advLast DESC, advPhone ASC; 
+
+	# Order Phone number by last name #
+SELECT *
+FROM Advisor
+WHERE advLast = 'Chong'
+ORDER BY advPhone;
+
+	# Group by, count, and order by #
+SELECT advLast, COUNT(*)
+FROM Advisor
+GROUP BY advLast
+ORDER BY advLast;
+
+	# Having #
+SELECT advLast, COUNT(*)
+FROM advisor
+GROUP BY advLast
+HAVING COUNT(*) > 1 
+ORDER BY advLast;
+
+	# Calculations #
+# Avg 
+SELECT AVG(dorCost)
+FROM dorm;
+
+# Sum 
+SELECT SUM(dorCost)
+FROM dorm;
+
+# Min and Max 
+SELECT MIN(dorCost)
+FROM dorm;
+
+SELECT MAX(dorCost)
+FROM dorm;
+
+	# IN or NOT IN #
+# IN
+SELECT *
+FROM Advisor
+WHERE advLast
+IN ('Chong', 'Tipton'); 
+
+# NOT IN 
+SELECT *
+FROM Advisor
+WHERE advLast
+NOT IN ('Chong', 'Tipton', 'Speck'); 
